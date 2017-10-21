@@ -98,5 +98,13 @@ namespace hubu.sgms.BLL
         /// <returns></returns>
         IList<College> SelectColleges();
 
+        /// <summary>
+        /// 选课
+        /// </summary>
+        /// <param name="stuId">学生id</param>
+        /// <param name="teacherCourseId">教师选课记录表的id</param>
+        /// <returns></returns>
+        bool ChooseCourse(int stuId, int teacherCourseId);
+
     }
 }

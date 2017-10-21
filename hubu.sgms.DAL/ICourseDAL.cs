@@ -118,7 +118,22 @@ namespace hubu.sgms.DAL
         /// <returns></returns>
         IList<Course> SelectCourse(CourseType courseType, string courseOpentime, string collageId, string courseName, int page, int size);
 
+        /// <summary>
+        /// 查询课程总数，与SelectCourse配合使用
+        /// </summary>
+        /// <param name="courseType"></param>
+        /// <param name="courseOpentime"></param>
+        /// <param name="collageId"></param>
+        /// <param name="courseName"></param>
+        /// <returns></returns>
         int SelectCount(CourseType courseType, string courseOpentime, string collageId, string courseName);
+
+        /// <summary>
+        /// 学生选课接口
+        /// </summary>
+        /// <param name="student">封装学生信息</param>
+        /// <param name="course">封装课程信息</param>
+        void selectCourse(Student student, Teacher_course courseInfo); 
     }
 
     public enum CourseType

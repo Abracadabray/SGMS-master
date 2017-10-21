@@ -13,6 +13,7 @@ namespace hubu.sgms.BLL.Impl
     {
         private ICourseDAL courseDAL = new CourseDALIml();
         private ICollegeDAL collegeDAL = new CollegeDALImpl();
+        private IStudengDAL studengDAL = StudentDALImpl.Instance();
 
         /// <summary>
         /// 查询详细信息
@@ -92,6 +93,18 @@ namespace hubu.sgms.BLL.Impl
         public IList<College> SelectColleges()
         {
             return collegeDAL.SelectColleges();
+        }
+
+        /// <summary>
+        /// 选课
+        /// </summary>
+        /// <param name="stuId"></param>
+        /// <param name="teacherCourseId"></param>
+        /// <returns></returns>
+        public bool ChooseCourse(int stuId, int teacherCourseId)
+        {
+            Student student = studengDAL.SelectStudentById(stuId);
+
         }
     }
 }

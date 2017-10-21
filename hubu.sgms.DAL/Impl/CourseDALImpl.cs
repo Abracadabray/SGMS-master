@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using hubu.sgms.Model;
 using System.Data.SqlClient;
 using System.Data;
+using hubu.sgms.Utils;
 
 namespace hubu.sgms.DAL.Impl
 {
@@ -349,6 +350,14 @@ namespace hubu.sgms.DAL.Impl
             return courseList;
         }
 
+        /// <summary>
+        /// 查询课程总数
+        /// </summary>
+        /// <param name="courseType"></param>
+        /// <param name="courseOpentime"></param>
+        /// <param name="collegeId"></param>
+        /// <param name="courseName"></param>
+        /// <returns></returns>
         public int SelectCount(CourseType courseType, string courseOpentime, string collegeId, string courseName)
         {
             string sql = "select count(*) as res " +
@@ -388,6 +397,22 @@ namespace hubu.sgms.DAL.Impl
             int count = Convert.ToInt32(row["res"]);
 
             return count;
+        }
+
+        /// <summary>
+        /// 选课
+        /// </summary>
+        /// <param name="student"></param>
+        /// <param name="courseInfo"></param>
+        public void selectCourse(Student student, Teacher_course courseInfo)
+        {
+            Course_choosing course_Choosing = new Course_choosing();
+            BeanUils.TransFields(student, course_Choosing);
+            BeanUils.TransFields(courseInfo, course_Choosing);
+            string sql = "insert into Course_choosing(course_choosing_id,student_id,student_name,teacher_course_id,teacher_id,teacher_name,course_id,course_name,classroom_id,status) "
+                + " values(@course_choosing_id,@student_id,@student_name,@teacher_course_id,@teacher_id,@teacher_name,@course_id,@course_name,@classroom_id,@status)";
+            IList<SqlParameter> sqlParameterList = BeanUils.SetInSQL(sql, course_Choosing);
+            DBUtils.getDBUtils().cud(sql, sqlParameterList.ToArray());
         }
 
     }
