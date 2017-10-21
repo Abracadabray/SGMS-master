@@ -114,5 +114,7 @@ namespace hubu.sgms.BLL.Impl
             courseDAL.ChooseCourse(student, teacher_Course);
             return true;
         }
+
+
     }
 }

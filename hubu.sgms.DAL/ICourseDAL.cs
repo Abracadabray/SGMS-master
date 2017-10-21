@@ -133,7 +133,28 @@ namespace hubu.sgms.DAL
         /// </summary>
         /// <param name="student">封装学生信息</param>
         /// <param name="course">封装课程信息</param>
-        void ChooseCourse(Student student, Teacher_course courseInfo); 
+        void ChooseCourse(Student student, Teacher_course courseInfo);
+
+        /// <summary>
+        /// 查询学生选课记录
+        /// </summary>
+        /// <param name="stuId">学生id</param>
+        /// <returns></returns>
+        IList<Course_choosing> SelectCourseChoosingListByStu(string stuId);
+
+        /// <summary>
+        /// 查询选课的具体信息
+        /// </summary>
+        /// <param name="courseChoosingId"></param>
+        /// <returns></returns>
+        Course_choosing SelectCourseChoosingDetails(string courseChoosingId);
+
+        /// <summary>
+        /// 查询学生的各科成绩
+        /// </summary>
+        /// <param name="stuId"></param>
+        /// <returns>封装成绩字段和课程名，不查询其他信息</returns>
+        IList<Course_choosing> SelectGrade(int stuId);
     }
 
     public enum CourseType
