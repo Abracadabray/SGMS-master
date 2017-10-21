@@ -51,6 +51,7 @@
     <Compile Include="Impl\HomeDALImpl.cs" />
     <Compile Include="Impl\LoginDALImpl.cs" />
     <Compile Include="Impl\StudentDALImpl.cs" />
+    <Compile Include="Impl\TeacherCourseDALImpl.cs" />
     <Compile Include="IStudengDAL.cs" />
     <Compile Include="ITeacherCourseDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

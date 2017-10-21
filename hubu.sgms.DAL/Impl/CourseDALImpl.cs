@@ -404,7 +404,7 @@ namespace hubu.sgms.DAL.Impl
         /// </summary>
         /// <param name="student"></param>
         /// <param name="courseInfo"></param>
-        public void selectCourse(Student student, Teacher_course courseInfo)
+        public void ChooseCourse(Student student, Teacher_course courseInfo)
         {
             Course_choosing course_Choosing = new Course_choosing();
             BeanUils.TransFields(student, course_Choosing);

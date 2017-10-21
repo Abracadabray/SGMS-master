@@ -133,7 +133,7 @@ namespace hubu.sgms.DAL
         /// </summary>
         /// <param name="student">封装学生信息</param>
         /// <param name="course">封装课程信息</param>
-        void selectCourse(Student student, Teacher_course courseInfo); 
+        void ChooseCourse(Student student, Teacher_course courseInfo); 
     }
 
     public enum CourseType
