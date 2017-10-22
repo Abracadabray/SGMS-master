@@ -25,7 +25,7 @@ namespace hubu.sgms.DAL.Impl
             return studentDAL;
         }
 
-        public Student SelectStudentById(int stuId)
+        public Student SelectStudentById(string stuId)
         {
             string sql = "select * from Student where student_id=@student_id ";
             SqlParameter[] sqlParameter = new SqlParameter[]

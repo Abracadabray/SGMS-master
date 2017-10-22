@@ -31,11 +31,19 @@ namespace hubu.sgms.WebApp.Controllers
             if (loginInfo != null)
             {
                 Session["loginInfo"] = loginInfo;
-                return Content("success:登陆成功！");
+                if (Session["prePage"] != null)
+                {
+                    string prePage = (string)Session["prePage"];//登陆前，访问的页面
+                    return Json(new { status = "1", successUrl = prePage });
+                }
+                //return Content("success:登陆成功！");
+                //TODO  不同角色的处理
+                return Json(new { status = "1", successUrl = "/Admin/Index" });//跳转到后台管理页面
             }
             else
             {
-                return Content("error:登陆失败！");
+                //return Content("error:登陆失败！");
+                return Json(new { status = "0", msg = "登录失败" } );//跳转到后台管理页面
             }
         }
     }

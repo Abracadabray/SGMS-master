@@ -26,7 +26,7 @@ namespace hubu.sgms.DAL.Impl
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Teacher_course SelectById(int id)
+        public Teacher_course SelectById(string id)
         {
             string sql = "select * from Teacher_course where teacher_course_id='" + id + "'";
             DataTable dataTable = DBUtils.getDBUtils().getRecords(sql);

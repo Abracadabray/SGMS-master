@@ -103,7 +103,7 @@ namespace hubu.sgms.BLL.Impl
         /// <param name="stuId"></param>
         /// <param name="teacherCourseId"></param>
         /// <returns></returns>
-        public bool ChooseCourse(int stuId, int teacherCourseId)
+        public bool ChooseCourse(string stuId, string teacherCourseId)
         {
             Student student = studengDAL.SelectStudentById(stuId);
             Teacher_course teacher_Course = teacherCourseDAL.SelectById(teacherCourseId);

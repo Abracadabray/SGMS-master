@@ -14,6 +14,6 @@ namespace hubu.sgms.DAL
         /// </summary>
         /// <param name="stuId"></param>
         /// <returns></returns>
-        Student SelectStudentById(int stuId);
+        Student SelectStudentById(string stuId);
     }
 }

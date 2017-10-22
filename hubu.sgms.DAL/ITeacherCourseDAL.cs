@@ -14,6 +14,6 @@ namespace hubu.sgms.DAL
         /// </summary>
         /// <param name="id">教师选课表的主键id</param>
         /// <returns></returns>
-        Teacher_course SelectById(int id);
+        Teacher_course SelectById(string id);
     }
 }

@@ -34,6 +34,7 @@ namespace hubu.sgms.WebApp.Controllers
         /// 跳转到课程展示列表页面
         /// </summary>
         /// <returns></returns>
+
         public ActionResult CourseDisplay()
         {
             //提取出参数的课程类型
@@ -55,10 +56,7 @@ namespace hubu.sgms.WebApp.Controllers
             ViewData["coursePhoto"] = course.course_photo;
             return View();
         }
-
-
-
-
+        
 
         // POST: Course
         /// <summary>
@@ -170,6 +168,53 @@ namespace hubu.sgms.WebApp.Controllers
             return Json(JsonUtils.CreatJsonObj<College>(count, colleges));
         }
 
+        /// <summary>
+        /// 选课接口，需要入参:学生id,教师_课程表的id
+        /// </summary>
+        /// <param name="teacherCourseId">教师_课程表的id</param>
+        /// <returns></returns>
+        public ActionResult ChooseCourse(string teacherCourseId)
+        {
+            if(teacherCourseId == null || "".Equals(teacherCourseId))
+            {
+                return Json(JsonUtils.CreatJsonObj(0, "课程id不能为空", null));
+            }
+            //获取登录信息
+            Login login = (Login)Session["loginInfo"];
+            if (login == null)
+            {
+                //跳转到登录页面
+                return RedirectToAction("Index", "Login");
+            }
+            string stuId = login.username;//用登录名作为学生表的主键
+
+            try
+            {
+                courseService.ChooseCourse(stuId, teacherCourseId);
+                return Json(JsonUtils.CreatJsonObj(1, "OK", null));
+            } catch (Exception)
+            {
+                return Json(JsonUtils.CreatJsonObj(0, "添加课程失败", null));
+            }
+            
+        }
+
+        /// <summary>
+        /// 跳转到学生选课页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChooseCourseView()
+        {
+            //获取登录信息
+            Login login = (Login)Session["loginInfo"];
+            if (login == null)
+            {
+                //跳转到登录页面
+                Session["prePage"] = "/Course/ChooseCourseView";//将当前页面地址放入session，登录后返回到该页面
+                return RedirectToAction("Index", "Login");
+            }
+            return View();
+        }
     }
 
 
