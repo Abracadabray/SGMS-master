@@ -184,6 +184,7 @@ namespace hubu.sgms.WebApp.Controllers
             if (login == null)
             {
                 //跳转到登录页面
+                Session["prePage"] = "/Course/ChooseCourseView";//将当前页面地址放入session，登录后返回到该页面
                 return RedirectToAction("Index", "Login");
             }
             string stuId = login.username;//用登录名作为学生表的主键
@@ -203,7 +204,7 @@ namespace hubu.sgms.WebApp.Controllers
         /// 跳转到学生选课页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult ChooseCourseView()
+        public ActionResult ChooseCoursePage()
         {
             //获取登录信息
             Login login = (Login)Session["loginInfo"];
@@ -214,6 +215,19 @@ namespace hubu.sgms.WebApp.Controllers
                 return RedirectToAction("Index", "Login");
             }
             return View();
+        }
+
+        /// <summary>
+        /// 获取导航栏信息
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetNavbarInfo()
+        {
+            //courseTypeName,courseTypeId
+            IList<Object> courseTypes = CourseTypeUtils.GetCourseTypes();
+            IList<College> colleges = courseService.SelectColleges();
+            return Json(new { courseTypes = courseTypes, colleges = colleges ,courseTypeCount=courseTypes.Count,collegeCount=colleges.Count});
+
         }
     }
 

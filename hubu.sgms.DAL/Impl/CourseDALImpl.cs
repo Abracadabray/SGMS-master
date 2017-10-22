@@ -517,5 +517,26 @@ namespace hubu.sgms.DAL.Impl
             return courses;
         }
 
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public IList<String> SelectCourseTypes()
+        {
+            string courseTypeSql = "select distinct course_type from Course";
+            DataTable dataTable = DBUtils.getDBUtils().getRecords(courseTypeSql);
+            IList<string> courseTypes = new List<string>();
+
+            foreach(DataRow row in dataTable.Rows)
+            {
+                if (row["course_type"] != null)
+                {
+                    courseTypes.Add(Convert.ToString(row["course_type"]));
+                }
+
+            }
+            return courseTypes;
+        }
+
     }
 }

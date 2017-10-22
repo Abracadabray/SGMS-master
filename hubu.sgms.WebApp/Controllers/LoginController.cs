@@ -34,6 +34,7 @@ namespace hubu.sgms.WebApp.Controllers
                 if (Session["prePage"] != null)
                 {
                     string prePage = (string)Session["prePage"];//登陆前，访问的页面
+                    Session["prePage"] = null;
                     return Json(new { status = "1", successUrl = prePage });
                 }
                 //return Content("success:登陆成功！");

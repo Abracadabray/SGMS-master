@@ -115,6 +115,21 @@ namespace hubu.sgms.BLL.Impl
             return true;
         }
 
-
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public IList<Course> SelectCourseTypes()
+        {
+            IList<string> courseTypes = courseDAL.SelectCourseTypes();
+            IList<Course> courses = new List<Course>();
+            foreach(string courseType in courseTypes)
+            {
+                Course course = new Course();
+                course.course_type = courseType;
+                courses.Add(course);
+            }
+            return courses;
+        }
     }
 }

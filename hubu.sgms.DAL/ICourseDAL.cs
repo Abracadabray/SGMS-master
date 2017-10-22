@@ -155,6 +155,13 @@ namespace hubu.sgms.DAL
         /// <param name="stuId"></param>
         /// <returns>封装成绩字段和课程名，不查询其他信息</returns>
         IList<Course_choosing> SelectGrade(int stuId);
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        IList<String> SelectCourseTypes();
+        
     }
 
     public enum CourseType
@@ -172,7 +179,7 @@ namespace hubu.sgms.DAL
     /// <summary>
     /// 课程类型相关的工具类
     /// </summary>
-    class CourseTypeUtils
+    public class CourseTypeUtils
     {
         /// <summary>
         /// 通过反射获取CourseType上的注解
@@ -212,6 +219,23 @@ namespace hubu.sgms.DAL
                 }
             }
             return CourseType.PublicElective;
+        }
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public static IList<Object> GetCourseTypes()
+        {
+            IList<Object> courses = new List<Object>();
+
+            foreach (CourseType courseType in Enum.GetValues(typeof(CourseType)))
+            {
+                string courseTypeName = GetInfo(courseType);
+                courses.Add(new { courseTypeName=courseTypeName,courseTypeId=(int)courseType});
+            }
+
+            return courses;
         }
     }
 }

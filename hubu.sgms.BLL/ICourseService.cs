@@ -106,5 +106,12 @@ namespace hubu.sgms.BLL
         /// <returns></returns>
         bool ChooseCourse(string stuId, string teacherCourseId);
 
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        IList<Course> SelectCourseTypes();
+
     }
 }
