@@ -118,7 +118,50 @@ namespace hubu.sgms.DAL
         /// <returns></returns>
         IList<Course> SelectCourse(CourseType courseType, string courseOpentime, string collageId, string courseName, int page, int size);
 
+        /// <summary>
+        /// 查询课程总数，与SelectCourse配合使用
+        /// </summary>
+        /// <param name="courseType"></param>
+        /// <param name="courseOpentime"></param>
+        /// <param name="collageId"></param>
+        /// <param name="courseName"></param>
+        /// <returns></returns>
         int SelectCount(CourseType courseType, string courseOpentime, string collageId, string courseName);
+
+        /// <summary>
+        /// 学生选课接口
+        /// </summary>
+        /// <param name="student">封装学生信息</param>
+        /// <param name="course">封装课程信息</param>
+        void ChooseCourse(Student student, Teacher_course courseInfo);
+
+        /// <summary>
+        /// 查询学生选课记录
+        /// </summary>
+        /// <param name="stuId">学生id</param>
+        /// <returns></returns>
+        IList<Course_choosing> SelectCourseChoosingListByStu(string stuId);
+
+        /// <summary>
+        /// 查询选课的具体信息
+        /// </summary>
+        /// <param name="courseChoosingId"></param>
+        /// <returns></returns>
+        Course_choosing SelectCourseChoosingDetails(string courseChoosingId);
+
+        /// <summary>
+        /// 查询学生的各科成绩
+        /// </summary>
+        /// <param name="stuId"></param>
+        /// <returns>封装成绩字段和课程名，不查询其他信息</returns>
+        IList<Course_choosing> SelectGrade(int stuId);
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        IList<String> SelectCourseTypes();
+        
     }
 
     public enum CourseType
@@ -136,7 +179,7 @@ namespace hubu.sgms.DAL
     /// <summary>
     /// 课程类型相关的工具类
     /// </summary>
-    class CourseTypeUtils
+    public class CourseTypeUtils
     {
         /// <summary>
         /// 通过反射获取CourseType上的注解
@@ -176,6 +219,23 @@ namespace hubu.sgms.DAL
                 }
             }
             return CourseType.PublicElective;
+        }
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public static IList<Object> GetCourseTypes()
+        {
+            IList<Object> courses = new List<Object>();
+
+            foreach (CourseType courseType in Enum.GetValues(typeof(CourseType)))
+            {
+                string courseTypeName = GetInfo(courseType);
+                courses.Add(new { courseTypeName=courseTypeName,courseTypeId=(int)courseType});
+            }
+
+            return courses;
         }
     }
 }

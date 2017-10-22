@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using hubu.sgms.Model;
 using System.Data.SqlClient;
 using System.Data;
+using hubu.sgms.Utils;
 
 namespace hubu.sgms.DAL.Impl
 {
@@ -349,6 +350,14 @@ namespace hubu.sgms.DAL.Impl
             return courseList;
         }
 
+        /// <summary>
+        /// 查询课程总数
+        /// </summary>
+        /// <param name="courseType"></param>
+        /// <param name="courseOpentime"></param>
+        /// <param name="collegeId"></param>
+        /// <param name="courseName"></param>
+        /// <returns></returns>
         public int SelectCount(CourseType courseType, string courseOpentime, string collegeId, string courseName)
         {
             string sql = "select count(*) as res " +
@@ -388,6 +397,145 @@ namespace hubu.sgms.DAL.Impl
             int count = Convert.ToInt32(row["res"]);
 
             return count;
+        }
+
+        /// <summary>
+        /// 选课
+        /// </summary>
+        /// <param name="student"></param>
+        /// <param name="courseInfo"></param>
+        public void ChooseCourse(Student student, Teacher_course courseInfo)
+        {
+            Course_choosing course_Choosing = new Course_choosing();
+            BeanUils.TransFields(student, course_Choosing);
+            BeanUils.TransFields(courseInfo, course_Choosing);
+            string sql = "insert into Course_choosing(course_choosing_id,student_id,student_name,teacher_course_id,teacher_id,teacher_name,course_id,course_name,classroom_id,status,course_credit) "
+                + " values(@course_choosing_id,@student_id,@student_name,@teacher_course_id,@teacher_id,@teacher_name,@course_id,@course_name,@classroom_id,@status,@course_credit)";
+            IList<SqlParameter> sqlParameterList = BeanUils.SetInSQL(sql, course_Choosing);
+            DBUtils.getDBUtils().cud(sql, sqlParameterList.ToArray());
+        }
+
+
+        /// <summary>
+        /// 查询学生选课记录,查询全部记录，所以当某些字段为null时，会抛出异常
+        /// </summary>
+        /// <param name="stuId">学生id</param>
+        /// <returns></returns>
+        public IList<Course_choosing> SelectCourseChoosingListByStu(string stuId)
+        {
+            string sql = "select * from Course_choosing where student_id='" + stuId + "'";
+            DataTable dataTable = DBUtils.getDBUtils().getRecords(sql);
+            IList<Course_choosing> courses = new List<Course_choosing>();
+            foreach(DataRow row in dataTable.Rows)
+            {
+                Course_choosing course = new Course_choosing();
+                int successCount = BeanUils.SetStringValues(course, row);
+                try
+                {
+                    course.status = Convert.ToInt32(row["status"]);
+                    course.usual_grade = Convert.ToDecimal(row["usual_grade"]);
+                    course.test_grade = Convert.ToDecimal(row["test_grade"]);
+                    course.course_credit = Convert.ToDecimal(row["course_credit"]);
+                    course.total_grade = Convert.ToDecimal(row["total_grade"]);
+                } catch (Exception e)
+                {
+
+                }
+                courses.Add(course);
+            }
+
+            return courses;
+        }
+
+        /// <summary>
+        /// 查询选课的具体信息
+        /// </summary>
+        /// <param name="courseChoosingId"></param>
+        /// <returns></returns>
+        public Course_choosing SelectCourseChoosingDetails(string courseChoosingId)
+        {
+            string sql = "select * from Course_choosing where course_choosing_id='" + courseChoosingId + "'";
+            DataTable dataTable = DBUtils.getDBUtils().getRecords(sql);
+            if (dataTable.Rows.Count > 0)
+            {
+                DataRow row = dataTable.Rows[0];
+                Course_choosing course = new Course_choosing();
+                int successCount = BeanUils.SetStringValues(course, row);
+                try
+                {
+                    course.status = Convert.ToInt32(row["status"]);
+                    course.usual_grade = Convert.ToDecimal(row["usual_grade"]);
+                    course.test_grade = Convert.ToDecimal(row["test_grade"]);
+                    course.course_credit = Convert.ToDecimal(row["course_credit"]);
+                    course.total_grade = Convert.ToDecimal(row["total_grade"]);
+                }
+                catch (Exception e)
+                {
+
+                }
+                return course;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// 查询学生的各科成绩
+        /// </summary>
+        /// <param name="stuId"></param>
+        /// <returns>封装成绩字段和课程名，不查询其他信息</returns>
+        public IList<Course_choosing> SelectGrade(int stuId)
+        {
+            string sql = "select course_name,usual_grade,test_grade,total_grade from Course_choosing where student_id='" + stuId + "' ";
+            DataTable dataTable = DBUtils.getDBUtils().getRecords(sql);
+            IList<Course_choosing> courses = new List<Course_choosing>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Course_choosing course = new Course_choosing();
+                if (row["course_name"] != null)
+                {
+                    course.course_name = Convert.ToString(row["course_name"]);
+                }
+                if (row["usual_grade"] != null)
+                {
+                    course.usual_grade = Convert.ToDecimal(row["usual_grade"]);
+
+                }
+                if (row["test_grade"] != null)
+                {
+                    course.test_grade = Convert.ToDecimal(row["test_grade"]);
+                }
+                if (row["total_grade"] != null)
+                {
+                    course.total_grade = Convert.ToDecimal(row["total_grade"]);
+
+                }
+
+                courses.Add(course);
+            }
+
+            return courses;
+        }
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public IList<String> SelectCourseTypes()
+        {
+            string courseTypeSql = "select distinct course_type from Course";
+            DataTable dataTable = DBUtils.getDBUtils().getRecords(courseTypeSql);
+            IList<string> courseTypes = new List<string>();
+
+            foreach(DataRow row in dataTable.Rows)
+            {
+                if (row["course_type"] != null)
+                {
+                    courseTypes.Add(Convert.ToString(row["course_type"]));
+                }
+
+            }
+            return courseTypes;
         }
 
     }

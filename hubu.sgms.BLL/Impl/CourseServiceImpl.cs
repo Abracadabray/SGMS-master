@@ -14,6 +14,9 @@ namespace hubu.sgms.BLL.Impl
         private ICourseDAL courseDAL = new CourseDALIml();
         private ICollegeDAL collegeDAL = new CollegeDALImpl();
 
+        private IStudengDAL studengDAL = StudentDALImpl.Instance();
+        private ITeacherCourseDAL teacherCourseDAL = TeacherCourseDALImpl.Instance();
+
         /// <summary>
         /// 查询详细信息
         /// </summary>
@@ -92,6 +95,41 @@ namespace hubu.sgms.BLL.Impl
         public IList<College> SelectColleges()
         {
             return collegeDAL.SelectColleges();
+        }
+
+        /// <summary>
+        /// 选课
+        /// </summary>
+        /// <param name="stuId"></param>
+        /// <param name="teacherCourseId"></param>
+        /// <returns></returns>
+        public bool ChooseCourse(string stuId, string teacherCourseId)
+        {
+            Student student = studengDAL.SelectStudentById(stuId);
+            Teacher_course teacher_Course = teacherCourseDAL.SelectById(teacherCourseId);
+            if(student==null || teacher_Course == null)
+            {
+                return false;
+            }
+            courseDAL.ChooseCourse(student, teacher_Course);
+            return true;
+        }
+
+        /// <summary>
+        /// 获取课程类型列表
+        /// </summary>
+        /// <returns></returns>
+        public IList<Course> SelectCourseTypes()
+        {
+            IList<string> courseTypes = courseDAL.SelectCourseTypes();
+            IList<Course> courses = new List<Course>();
+            foreach(string courseType in courseTypes)
+            {
+                Course course = new Course();
+                course.course_type = courseType;
+                courses.Add(course);
+            }
+            return courses;
         }
     }
 }

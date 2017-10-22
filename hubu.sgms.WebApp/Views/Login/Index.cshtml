@@ -70,18 +70,27 @@
     <script>
         //回调函数
         function afterLogin(data) {
-            var serverData = data.split(':');
-            if (serverData[0] == "success") {
-                window.location.href = "/Admin/Index";
-            }
-            else if (serverData[0] == "error") {
+            //var serverData = data.split(':');
+            //if (serverData[0] == "success") {
+            //    window.location.href = "/Admin/Index";
+            //}
+            //else if (serverData[0] == "error") {
+            //    alert("登陆失败");
+            //    return false;
+            //}
+            //else {
+            //    alert("系统繁忙");
+            //    return false;
+            //}
+            var status = data.status;
+            if (!status || status == '0') {
                 alert("登陆失败");
-                return false;
+            } else if (data.successUrl != null) {
+                window.location.href = data.successUrl;//跳转到返回的url
+            } else {
+                alert("登陆失败");
             }
-            else {
-                alert("系统繁忙");
-                return false;
-            }
+            
         }
     </script>
     

@@ -41,7 +41,7 @@
                                     <b class="caret"></b>
                                 </a>
                                 <ul id="courseTypeList" class="dropdown-menu">
-                                    <li>
+                                    @*<li>
                                         <a class="courseTypeElem" name="courseType-1" onclick="chooseCourseType(this,1);" href="javascript:void(0);">专业必修课</a>
                                     </li>
                                     <li class="divider"></li>
@@ -55,7 +55,7 @@
                                     <li class="divider"></li>
                                     <li>
                                         <a class="courseTypeElem" name="courseType-4" onclick="chooseCourseType(this,4);" href="javascript:void(0);">公共选修课</a>
-                                    </li>
+                                    </li>*@
                                 </ul>
                             </li>
                                 
@@ -64,7 +64,7 @@
                                     <span id="courseTime">开课时间&emsp;</span>
                                     <b class="caret"></b>
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul id="yearList" class="dropdown-menu">
                                     <li>
                                         <a onclick="chooseCourseTime(this,16);" href="javascript:void(0);">16</a>
                                     </li>
@@ -148,10 +148,10 @@
     <footer></footer>
 
     @{
-        using (Ajax.BeginForm("SelectColleges", "Course", new AjaxOptions()
+        using (Ajax.BeginForm("GetNavbarInfo", "Course", new AjaxOptions()
         {
             HttpMethod = "post",
-            OnSuccess = "getColleges",
+            OnSuccess = "prepareNavbar",
             LoadingElementId = "loadingImg"
         }))
         {
@@ -193,7 +193,7 @@
                     refreshCourseList();
                 })
 
-            setDefaultCourseType(defaultCourseType);
+            //setDefaultCourseType(defaultCourseType);//放到prepareNavbar()方法中
         })
 
         /**
@@ -313,6 +313,42 @@
                 });
                 //$("#collegeList").html(html);
 
+            }
+
+            /**
+             * 设置导航栏选项
+             */
+            function prepareNavbar(data) {
+                var courseTypes = data.courseTypes;
+                var colleges = data.colleges;
+                var html = "";
+                //<li>< a onclick= "choosecollege(this, 1); " href= "#" > 外语学院</a></li >
+                $(colleges).each(function (index, elem) {
+                    html = '<li><a class="collegeNameSetter" name="' + elem.college_id + '" onclick= "chooseCollege(this, ' + elem.college_id + '); " href= "javascript:void(0);" > ' + elem.name + "</a></li >";
+                    $("#collegeList").append($.parseHTML(html, document, true));
+
+                    if (index != data.collegeCount - 1) {
+                        $("#collegeList").append($.parseHTML('<li class="divider"></li>', document, true));
+                    }
+
+                    //$.parseHTML('', document, true)
+                });
+
+                //courseTypeList
+                //<li><a class="courseTypeElem" name="courseType-1" onclick="chooseCourseType(this,1);" href="javascript:void(0);">专业必修课</a></li >
+                $(courseTypes).each(function (index, elem) {
+                    html = '<li><a class="courseTypeElem" name="courseType-' + elem.courseTypeId + '" onclick="chooseCourseType(this,'
+                        + elem.courseTypeId + ');" href="javascript:void(0);">' + elem.courseTypeName + '</a></li ';
+                    $("#courseTypeList").append($.parseHTML(html, document, true));
+
+                    if (index != data.courseTypeCount - 1) {
+                        $("#courseTypeList").append($.parseHTML('<li class="divider"></li>', document, true));
+                    }
+                });
+
+                setDefaultCourseType(defaultCourseType);
+                //yearList
+                //<li><a onclick="chooseCourseTime(this,16);" href="javascript:void(0);">16</a></li >
             }
 
             /**
